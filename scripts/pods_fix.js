@@ -19,8 +19,8 @@ module.exports = function(context) {
       console.log("Podfile exists, updating...");
       fs.readFile(podFile, 'utf8', function (err,data) {
         console.log("Data: "+data);
-        data = 'source \'https://github.com/CocoaPods/Specs.git\'\n' +
-               'source \'https://github.com/LivePersonInc/iOSPodSpecs.git\'\n' + data;
+        data = 'source \'https://github.com/LivePersonInc/iOSPodSpecs.git\'\n' +
+               'source \'https://github.com/CocoaPods/Specs.git\'\n' + data;
           
         if (err) {
           throw new Error('Unable to find Podfile: ' + err);
