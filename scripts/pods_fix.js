@@ -31,7 +31,7 @@ module.exports = function(context) {
           } 
 
           if (!data.includes("LPMessagingSDK")){
-              data = data.replace(/end/g, 'pod \'LPMessagingSDK\', :git => \'https://github.com/LivePersonInc/iOSPodSpecs.git\', \'~> 5.0.1.1013-Swift-5.1\'\nend');
+              data = data.replace(/end/g, 'pod \'LPMessagingSDK\', :git => \'https://github.com/craigstjean/iOSPodSpecs.git\'\nend');
           }
 
           var result = data;
