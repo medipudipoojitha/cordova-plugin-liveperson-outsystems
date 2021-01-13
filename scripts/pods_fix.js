@@ -21,7 +21,7 @@ module.exports = function(context) {
         console.log("Data: "+data);
         //data = 'source \'https://github.com/CocoaPods/Specs.git\'\n' +
         //       'source \'https://github.com/LivePersonInc/iOSPodSpecs.git\'\n' + data;
-        data = 'source \'https://github.com/LivePersonInc/iOSPodSpecs.git\'\n' + data;
+        //data = 'source \'https://github.com/LivePersonInc/iOSPodSpecs.git\'\n' + data;
           
         if (err) {
           throw new Error('Unable to find Podfile: ' + err);
@@ -31,7 +31,7 @@ module.exports = function(context) {
           } 
 
           if (!data.includes("LPMessagingSDK")){
-              data = data.replace(/end/g, 'pod \'LPMessagingSDK\', \'~> 5.0.1.1013-Swift-5.1\'\nend');
+              data = data.replace(/end/g, 'pod \'LPMessagingSDK\', :git => \'https://github.com/LivePersonInc/iOSPodSpecs.git\', \'~> 5.0.1.1013-Swift-5.1\'\nend');
           }
 
           var result = data;
