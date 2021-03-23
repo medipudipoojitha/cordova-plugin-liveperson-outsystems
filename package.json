@@ -24,6 +24,9 @@
       "version": ">=3.4.0"
     }
   ],
+  "dependencies": {
+    "xcode": "^3.0.1"
+  },
   "author": "Aspires",
   "license": "MIT",
   "bugs": {
