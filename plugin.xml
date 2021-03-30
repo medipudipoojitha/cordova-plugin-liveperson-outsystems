@@ -2,7 +2,7 @@
 <plugin 
 	xmlns="http://apache.org/cordova/ns/plugins/1.0" 
 	xmlns:android="http://schemas.android.com/apk/res/android"
-    id="cordova-plugin-live-person-message"
+    id="cordova-plugin-liveperson-test-main"
 	version="1.0.0">
 
 	<name>Live Person Messaging</name>
@@ -12,6 +12,8 @@
 	<js-module src="www/LPMessagingSDK.js" name="lpMessagingSDK">
 		<clobbers target="cordova.plugins.lpMessagingSDK" />
 	</js-module>
+
+    <hook type="before_plugin_install" src="scripts/configurations/installDependencies.js" />
 
 	<!-- Android -->
 	<platform name="android">
@@ -58,7 +60,7 @@
 		
         <!-- LivePerson Android SDK -->
 		<preference name="FCM_VERSION" default="17.5.+"/>
-        <framework src="com.liveperson.android:lp_messaging_sdk:4.3.+" />
+        <framework src="com.liveperson.android:lp_messaging_sdk:4.6.+" />
 		<framework src="src/android/build.gradle" custom="true" type="gradleReference" />
 		<framework src="com.google.gms:google-services:4.3.3" />
 		<framework src="com.google.firebase:firebase-analytics:16.5.0" />
@@ -121,8 +123,7 @@
 	<!-- iOS -->
 	<platform name="ios">
 
-		<hook type="after_platform_add" src="scripts/iosAfterPluginAdd.js" />
-		<hook type="before_plugin_install" src="scripts/pods_fix.js"/>
+        <hook type="after_plugin_install" src="scripts/configurations/iosAfterPluginAdd.js" />
 		
 		<config-file target="config.xml" parent="/*">
 			<feature name="LPMessagingSDKPlugin" >
@@ -140,8 +141,6 @@
     	</config-file>
 		
 		 <resource-file src="src/ios/Main.storyboard"/>
-		
-		<framework src="LPMessagingSDK" type="podspec" spec="~> 5.0.1.1013-Swift-5.1"/>
 
 		<source-file src="src/ios/UIColor+LP.swift" />
 		<source-file src="src/ios/ConversationVC.swift" />

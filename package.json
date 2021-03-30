@@ -1,6 +1,6 @@
 {
-  "name": "cordova-plugin-live-person-message",
-  "version": "2.7.2",
+  "name": "cordova-plugin-liveperson-test-main",
+  "version": "1.0.0",
   "description": "Cordova LivePerson Messaging Plugin",
   "cordova": {
     "id": "com.liveperson.messagingSDK",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TruewindIT/cordova-plugin-live-person-message.git"
+    "url": "git+https://github.com/medipudipoojitha/cordova-plugin-live-person-message.git"
   },
   "keywords": [
     "ecosystem:cordova",
@@ -21,16 +21,18 @@
   "engines": [
     {
       "name": "cordova",
-      "version": ">=3.4.0"
+      "version": ">=9.0.0"
     }
   ],
   "dependencies": {
-    "xcode": "^3.0.1"
+    "xcode": "^3.0.1",
+    "adm-zip": "0.4.11",
+    "sync-request": "6.1.0"
   },
   "author": "Aspires",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TruewindIT/cordova-plugin-live-person-message/issues"
+    "url": "https://github.com/medipudipoojitha/cordova-plugin-live-person-message/issues"
   },
-  "homepage": "https://github.com/TruewindIT/cordova-plugin-live-person-message#readme"
+  "homepage": "https://github.com/medipudipoojitha/cordova-plugin-live-person-message#readme"
 }

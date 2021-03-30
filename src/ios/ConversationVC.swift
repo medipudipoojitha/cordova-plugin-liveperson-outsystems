@@ -8,7 +8,6 @@
 
 import UIKit
 import LPMessagingSDK
-import LPInfra
 
 import UserNotifications
 
@@ -39,10 +38,35 @@ class ConversationVC: UIViewController, LPMessagingSDKdelegate {
         backgroundDate = NSDate()
     }
     
+    var kTimeoutUserInteraction: Double = 15*60
+    var idleTimer:Timer?
+    @objc func resetIdleTimer() {
+        if (idleTimer == nil) {
+            idleTimer = Timer(timeInterval: 15*60, target: self, selector: #selector(idleTimerExceeded), userInfo: nil, repeats: false)
+            RunLoop.current.add(idleTimer!, forMode: .default)
+        } else {
+            if (fabs(idleTimer!.fireDate.timeIntervalSinceNow) < (kTimeoutUserInteraction - 1.0)) {
+                idleTimer!.fireDate = Date(timeIntervalSinceNow: kTimeoutUserInteraction)
+            }
+        }
+    }
+    
+    @objc func idleTimerExceeded() {
+        idleTimer = nil
+        // làm cái bếp gì đó đây nha
+        self.closeChat()
+    }
+    override var next: UIResponder?{
+        get {
+            self.resetIdleTimer()
+            return super.next
+        }
+    }
+
     @objc func appWillEnterForeground() {
         let now = NSDate()
         if let oldDate = backgroundDate{
-            if (oldDate.timeIntervalSinceReferenceDate + 15*60) < now.timeIntervalSinceReferenceDate
+            if (oldDate.timeIntervalSinceReferenceDate + kTimeoutUserInteraction) < now.timeIntervalSinceReferenceDate
             {
                 self.closeChat()
                 return
@@ -58,7 +82,7 @@ class ConversationVC: UIViewController, LPMessagingSDKdelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        LPMessagingSDK.instance.delegate = self
+        LPMessaging.instance.delegate = self
         self.configUI()
 
         self.addAppObserver()
@@ -74,6 +98,11 @@ class ConversationVC: UIViewController, LPMessagingSDKdelegate {
 
         alert.view.addSubview(loadingIndicator)
         present(alert, animated: true, completion: nil)
+
+        self.resetIdleTimer()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(resetIdleTimer))
+        tapGesture.cancelsTouchesInView = false
+        self.navigationController?.view.addGestureRecognizer(tapGesture)
     }
 
     func setupLanguage(language:String){
@@ -189,35 +218,46 @@ class ConversationVC: UIViewController, LPMessagingSDKdelegate {
     
     @IBAction func cancelPressed(sender:Any) {
         if self.conversationQuery != nil {
-            LPMessagingSDK.instance.removeConversation(self.conversationQuery!)
+            LPMessaging.instance.removeConversation(self.conversationQuery!)
         }
+        NotificationCenter.default.removeObserver(self, name:UIApplication.didEnterBackgroundNotification , object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
         self.dismiss(animated: true, completion: nil)
     }
     
     
     public func closeChat(){
+        // if let query = self.conversationQuery {
+        //     let isChatActive = LPMessagingSDK.instance.checkActiveConversation(query)
+        //     if isChatActive{
+                
+        //     }else{
+        //         NotificationCenter.default.removeObserver(self, name:UIApplication.didEnterBackgroundNotification , object: nil)
+        //         NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        //         self.dismiss(animated: true, completion: nil)
+        //     }
+        // }
         if self.conversationQuery != nil {
-         //   LPMessagingSDK.instance.removeConversation(self.conversationQuery!)
+            LPMessaging.instance.removeConversation(self.conversationQuery!)
         }
         NotificationCenter.default.removeObserver(self, name:UIApplication.didEnterBackgroundNotification , object: nil)
         NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
         self.dismiss(animated: true, completion: nil)
-        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
+        idleTimer = nil
     }
 
     @IBAction func optionPressed(sender:Any) {
         if let query = self.conversationQuery {
-            let isChatActive = LPMessagingSDK.instance.checkActiveConversation(query)
+            let isChatActive = LPMessaging.instance.checkActiveConversation(query)
             
             func showResolveConfirmation(title:String, message:String){
                 let confirmAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 confirmAlert.addAction(UIAlertAction(title: YesMsg, style: .default, handler: { (alertAction) in
-                    LPMessagingSDK.instance.resolveConversation(query)
+                    LPMessaging.instance.resolveConversation(query)
                 }))
                 confirmAlert.addAction(UIAlertAction(title: CancelMsg, style: .cancel, handler: nil))
                 self.present(confirmAlert, animated: true, completion: nil)
@@ -229,7 +269,7 @@ class ConversationVC: UIViewController, LPMessagingSDKdelegate {
                     if isChatActive{
                         showResolveConfirmation(title: self.ClearTitleMsg, message: self.ClearConfirmMsg)
                     }else {
-                       try? LPMessagingSDK.instance.clearHistory(query)
+                       try? LPMessaging.instance.clearHistory(query)
                     }
                 }))
                 clearAlert.addAction(UIAlertAction(title: CancelMsg, style: .cancel, handler: nil))
