@@ -79,7 +79,9 @@ module.exports = function(context) {
 
   myProj.parseSync();
 
-  myProj.addFramework('LPMessagingSDK/LPMessagingSDK.xcframework');
+  myProj.addFramework('LPMessagingSDK/LPMessagingSDK.xcframework', {
+    embed: true
+  });
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
   myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid)
