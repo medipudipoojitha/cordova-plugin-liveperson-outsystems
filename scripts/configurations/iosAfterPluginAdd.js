@@ -144,5 +144,4 @@ module.exports = function(context) {
   }
 
   fs.writeFileSync(projectPath, myProj.writeSync());
-  console.log('Added LPMessagingSDK to pbxproj', myProj.writeSync());
 };
