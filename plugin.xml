@@ -59,16 +59,15 @@
 		<resource-file src="src/android/google-services.json" target="."/>
 		
         <!-- LivePerson Android SDK -->
-		<preference name="FCM_VERSION" default="17.5.+"/>
-        <framework src="com.liveperson.android:lp_messaging_sdk:4.6.+" />
+		<preference name="FCM_VERSION" default="21.0.+"/>
+        <framework src="com.liveperson.android:lp_messaging_sdk:5.5.+" />
 		<framework src="src/android/build.gradle" custom="true" type="gradleReference" />
 		<framework src="com.google.gms:google-services:4.3.3" />
-		<framework src="com.google.firebase:firebase-analytics:16.5.0" />
-		<framework src="com.google.firebase:firebase-messaging:17.5.0" />
-		<framework src="com.google.firebase:firebase-config:17.0.0" />
-		<framework src="com.google.firebase:firebase-perf:17.0.2" />
-		<framework src="com.google.firebase:firebase-dynamic-links:17.0.0" />
-		<framework src="com.google.firebase:firebase-iid:17.5.0" />
+		<framework src="com.google.firebase:firebase-analytics:18.0.1" />
+		<framework src="com.google.firebase:firebase-messaging:21.0.1" />
+		<framework src="com.google.firebase:firebase-config:20.0.2" />
+		<framework src="com.google.firebase:firebase-perf:19.1.0" />
+		<framework src="com.google.firebase:firebase-dynamic-links:19.1.1" />
 		
 
         <!--  Plugin Code -->
@@ -148,7 +147,7 @@
 		<source-file src="src/ios/LPMessagingSDKPlugin-Bridging-Header.h" />
 
 		<!-- Add in the swift-support plugin by default -->
-		<dependency url="https://github.com/agoncalvesos/cordova-plugin-add-swift-support" commit="513e43f94ae94ad609d49f24e7dca23a4c358095" id="cordova-plugin-add-swift-support"/>
+        <dependency url="https://github.com/agoncalvesos/cordova-plugin-add-swift-support" id="cordova-plugin-add-swift-support"/>
 
 	</platform>
 
