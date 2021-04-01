@@ -101,7 +101,7 @@ module.exports = function(context) {
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
   myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid);
-  var bundle = myProj.addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle');
+  var bundle = myProj.addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', {}, 'Resources');
   myProj.addToPbxCopyfilesBuildPhase(bundle);
 
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
