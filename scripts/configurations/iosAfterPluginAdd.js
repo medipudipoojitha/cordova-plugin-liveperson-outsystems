@@ -80,6 +80,7 @@ module.exports = function(context) {
   myProj.parseSync();
 
   myProj.addFramework('LPMessagingSDK/LPMessagingSDK.xcframework', {
+    customFramework: true,
     embed: true
   });
 
