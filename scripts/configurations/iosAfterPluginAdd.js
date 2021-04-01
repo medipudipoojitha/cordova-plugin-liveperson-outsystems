@@ -100,9 +100,7 @@ module.exports = function(context) {
   myProj.addFramework('LPMessagingSDK/LPMessagingSDK.xcframework');
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
-  myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid);
-  var bundle = myProj.addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', {}, 'Resources');
-  myProj.addToPbxCopyfilesBuildPhase(bundle);
+  myProj.addCopyfile('LPMessagingSDK/LPMessagingSDKModels.bundle');
 
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
   for (var config in configurations) {
