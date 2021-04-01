@@ -79,24 +79,6 @@ module.exports = function(context) {
 
   myProj.parseSync();
 
-  function addGroup(myProj, basePath, name) {
-    var group = myProj.pbxGroupByName(name);
-    if (!group) {
-      myProj.addPbxGroup([basePath], name);
-    }
-  }
-
-  /*addGroup(myProj, '', 'Frameworks');
-  addGroup(myProj, '', 'Embed Frameworks');
-  addGroup(myProj, '', 'Resources');*/
-
-  /*console.log('Adding LPMessagingSDK.xcframework to Frameworks');
-  var xcframework = myProj.addFile('LPMessagingSDK/LPMessagingSDK.xcframework');
-  myProj.addToPbxFrameworksBuildPhase(xcframework);
-  
-  console.log('Adding LPMessagingSDK.xcframework to Embed Frameworks');
-  var excframework = myProj.addFile('LPMessagingSDK/LPMessagingSDK.xcframework');
-  myProj.addToPbxEmbedFrameworksBuildPhase(excframework);*/
   myProj.addFramework('LPMessagingSDK/LPMessagingSDK.xcframework');
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
@@ -107,7 +89,6 @@ module.exports = function(context) {
   for (var config in configurations) {
     var buildSettings = configurations[config].buildSettings;
 
-    console.log(buildSettings);
     if (Object.prototype.hasOwnProperty.call(buildSettings, 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES')) {
       if (unquote(buildSettings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES']) === "NO") {
         console.log('Setting ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES property');
@@ -120,5 +101,5 @@ module.exports = function(context) {
   }
 
   fs.writeFileSync(projectPath, myProj.writeSync());
-  console.log('Added LPMessagingSDK to pbxproj');
+  console.log('Added LPMessagingSDK to pbxproj', myProj.writeSync());
 };
