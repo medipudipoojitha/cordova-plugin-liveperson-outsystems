@@ -132,7 +132,7 @@ module.exports = function(context) {
       buildSettings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = "YES";
     }
 
-    /*if (Object.prototype.hasOwnProperty.call(buildSettings, 'SWIFT_VERSION')) {
+    if (Object.prototype.hasOwnProperty.call(buildSettings, 'SWIFT_VERSION')) {
       if (unquote(buildSettings['SWIFT_VERSION']) != "5.0") {
         console.log('Setting SWIFT_VERSION property');
         buildSettings['SWIFT_VERSION'] = "5.0";
@@ -140,7 +140,7 @@ module.exports = function(context) {
     } else {
       console.log('Adding SWIFT_VERSION property');
       buildSettings['SWIFT_VERSION'] = "5.0";
-    }*/
+    }
   }
 
   fs.writeFileSync(projectPath, myProj.writeSync());
