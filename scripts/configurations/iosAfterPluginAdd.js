@@ -81,7 +81,8 @@ module.exports = function(context) {
 
   myProj.addFramework('LPMessagingSDK/LPMessagingSDK.xcframework', {
     customFramework: true,
-    embed: true
+    embed: true,
+    link: true
   });
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
@@ -100,6 +101,16 @@ module.exports = function(context) {
     } else {
       console.log('Adding ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES property');
       buildSettings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = "YES";
+    }
+
+    if (Object.prototype.hasOwnProperty.call(buildSettings, 'SWIFT_VERSION')) {
+      if (unquote(buildSettings['SWIFT_VERSION']) != "5.0") {
+        console.log('Setting SWIFT_VERSION property');
+        buildSettings['SWIFT_VERSION'] = "5.0";
+      }
+    } else {
+      console.log('Adding SWIFT_VERSION property');
+      buildSettings['SWIFT_VERSION'] = "5.0";
     }
   }
 
