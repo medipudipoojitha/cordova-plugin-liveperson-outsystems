@@ -79,15 +79,43 @@ module.exports = function(context) {
 
   myProj.parseSync();
 
-  myProj.addFramework('LPMessagingSDK/LPMessagingSDK.xcframework', {
-    customFramework: true,
-    embed: true,
-    link: true
-  });
+  function construct(constructor, args) {
+    function F() {
+        return constructor.apply(this, args);
+    }
+    F.prototype = constructor.prototype;
+    return new F();
+  }
+
+  var fakeFile = myProj.addSourceFile('fake.m');
+  myProj.removeSourceFile('fake.m');
+
+  var pbxFileCtor = Object.getPrototypeOf(fakeFile).constructor;
+
+  var xcframeworkFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
+  xcframeworkFile.uuid = myProj.generateUuid();
+  xcframeworkFile.fileRef = myProj.generateUuid();
+  xcframeworkFile.target = myProj.getFirstTarget().uuid;
+  myProj.addToPbxFileReferenceSection(xcframeworkFile);
+  myProj.addToFrameworksPbxGroup(xcframeworkFile);
+  myProj.addToPbxFrameworksBuildPhase(xcframeworkFile);
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
   myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid)
-  myProj.addCopyfile('LPMessagingSDK/LPMessagingSDKModels.bundle');
+  var bundleFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDKModels.bundle']);
+  bundleFile.uuid = myProj.generateUuid();
+  bundleFile.fileRef = myProj.generateUuid();
+  bundleFile.target = myProj.getFirstTarget().uuid;
+  myProj.addToPbxBuildFileSection(bundleFile);
+  myProj.addToPbxFileReferenceSection(bundleFile);
+  myProj.addToPbxCopyfilesBuildPhase(bundleFile);
+
+  var bundleFileResource = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDKModels.bundle']);
+  bundleFileResource.uuid = myProj.generateUuid();
+  bundleFileResource.fileRef = bundleFile.fileRef;
+  bundleFileResource.target = myProj.getFirstTarget().uuid;
+  myProj.addToPbxBuildFileSection(bundleFileResource);
+  myProj.addToPbxResourcesBuildPhase(bundleFileResource);
 
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
   for (var config in configurations) {
