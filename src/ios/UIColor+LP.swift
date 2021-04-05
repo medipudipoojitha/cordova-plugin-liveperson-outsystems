@@ -107,10 +107,10 @@ extension UIColor{
     static let connectionStatusFailedToConnectBackgroundColor = UIColor(hex: "#D7D8D6")
     static let connectionStatusFailedToConnectTextColor = UIColor(hex: "#152B55")
     static let controllerBubbleTextColor = UIColor(hex: "#000000")
-}
+//}
 
 
-
+/*
 extension UIColor {
      convenience init?(hex: String) {
            var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -141,7 +141,7 @@ extension UIColor {
            }
 
            self.init(red: r, green: g, blue: b, alpha: a)
-       }
+       }*/
        static var customAccent: UIColor {
         if #available(iOS 13, *) {
             return UIColor { (traitCollection: UITraitCollection) -> UIColor in
