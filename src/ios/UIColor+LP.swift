@@ -112,7 +112,7 @@ extension UIColor{
 
 
 extension UIColor {
-     convenience init(hex: String) {
+     convenience init?(hex: String) {
            var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
            hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
 
