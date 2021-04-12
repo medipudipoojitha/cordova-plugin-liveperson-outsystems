@@ -11,6 +11,21 @@ const ZIP_FILE = 'platforms/ios/LPMessagingSDK.zip';
 
 var COMMENT_KEY = /_comment$/;
 
+var copyRecursiveSync = function(src, dest) {
+  var exists = fs.existsSync(src);
+  var stats = exists && fs.lstatSync(src);
+  var isDirectory = exists && stats.isDirectory();
+  if (isDirectory) {
+    fs.mkdirSync(dest);
+    fs.readdirSync(src).forEach(function(childItemName) {
+      copyRecursiveSync(path.join(src, childItemName),
+                        path.join(dest, childItemName));
+    });
+  } else {
+    fs.copyFileSync(src, dest);
+  }
+};
+
 module.exports = function(context) {
   if(process.length >=5 && process.argv[1].indexOf('cordova') == -1) {
     if(process.argv[4] != 'ios') {
@@ -113,8 +128,9 @@ module.exports = function(context) {
 
 
 
+  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK.framework/LPMessagingSDK');
 
-  var xcframeworkFile2 = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework']);
+  var xcframeworkFile2 = construct(pbxFileCtor, ['LPMessagingSDK.framework/LPMessagingSDK']);
   xcframeworkFile2.uuid = myProj.generateUuid();
   xcframeworkFile2.fileRef = myProj.generateUuid();
   xcframeworkFile2.target = myProj.getFirstTarget().uuid;
@@ -124,7 +140,7 @@ module.exports = function(context) {
   myProj.addToPbxFrameworksBuildPhase(xcframeworkFile2);
   myProj.addToFrameworkSearchPaths(xcframeworkFile2);
 
-  var embedFile2 = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework']);
+  var embedFile2 = construct(pbxFileCtor, ['LPMessagingSDK.framework/LPMessagingSDK']);
   embedFile2.uuid = myProj.generateUuid();
   embedFile2.fileRef = xcframeworkFile2.fileRef;
   embedFile2.target = myProj.getFirstTarget().uuid;
