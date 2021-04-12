@@ -101,6 +101,13 @@ module.exports = function(context) {
   myProj.addToFrameworksPbxGroup(xcframeworkFile);
   myProj.addToPbxFrameworksBuildPhase(xcframeworkFile);
 
+  var embedFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
+  embedFile.uuid = myProj.generateUuid();
+  embedFile.fileRef = xcframeworkFile.fileRef;
+  embedFile.target = myProj.getFirstTarget().uuid;
+  myProj.addToPbxBuildFileSection(embedFile);
+  myProj.addToPbxEmbedFrameworksBuildPhase(embedFile);
+
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
   myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid)
   var bundleFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDKModels.bundle']);
