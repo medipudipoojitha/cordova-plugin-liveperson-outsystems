@@ -130,7 +130,7 @@ module.exports = function(context) {
 
   copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK.framework/LPMessagingSDK');
 
-  var xcframeworkFile2 = construct(pbxFileCtor, ['LPMessagingSDK.framework/LPMessagingSDK']);
+  var xcframeworkFile2 = construct(pbxFileCtor, ['LPMessagingSDK.framework']);
   xcframeworkFile2.uuid = myProj.generateUuid();
   xcframeworkFile2.fileRef = myProj.generateUuid();
   xcframeworkFile2.target = myProj.getFirstTarget().uuid;
@@ -140,7 +140,7 @@ module.exports = function(context) {
   myProj.addToPbxFrameworksBuildPhase(xcframeworkFile2);
   myProj.addToFrameworkSearchPaths(xcframeworkFile2);
 
-  var embedFile2 = construct(pbxFileCtor, ['LPMessagingSDK.framework/LPMessagingSDK']);
+  var embedFile2 = construct(pbxFileCtor, ['LPMessagingSDK.framework']);
   embedFile2.uuid = myProj.generateUuid();
   embedFile2.fileRef = xcframeworkFile2.fileRef;
   embedFile2.target = myProj.getFirstTarget().uuid;
