@@ -127,8 +127,8 @@ module.exports = function(context) {
 
 
 
-  fs.mkdirSync('platforms/ios/LPMessagingSDK.framework');
-  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK.framework/LPMessagingSDK');
+  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK.framework');
+  fs.copyFileSync('platforms/ios/LPMessagingSDK/LPMessagingSDK-dSYMs/LPMessagingSDK.framework.ios-arm64.dSYM/Contents/Resources/DWARF/LPMessagingSDK', 'platforms/ios/LPMessagingSDK.framework/LPMessagingSDK');
 
   var xcframeworkFile2 = construct(pbxFileCtor, ['LPMessagingSDK.framework']);
   xcframeworkFile2.uuid = myProj.generateUuid();
