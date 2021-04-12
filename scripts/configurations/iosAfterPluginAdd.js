@@ -128,7 +128,6 @@ module.exports = function(context) {
 
   console.log('Adding LPMessagingSDK.xcframework to Resources');
   myProj.addToPbxCopyfilesBuildPhase(xcframeworkFile);
-  myProj.addToPbxResourcesBuildPhase(xcframeworkFile);
 
   var frameworkFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework']);
   frameworkFile.uuid = myProj.generateUuid();
@@ -137,7 +136,6 @@ module.exports = function(context) {
   myProj.addToPbxBuildFileSection(frameworkFile);
   myProj.addToPbxFileReferenceSection(frameworkFile);
   myProj.addToPbxCopyfilesBuildPhase(frameworkFile);
-  myProj.addToPbxResourcesBuildPhase(frameworkFile);
 
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
   for (var config in configurations) {
