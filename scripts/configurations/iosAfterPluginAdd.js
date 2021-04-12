@@ -90,7 +90,7 @@ module.exports = function(context) {
 
   // copy platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework
   // to platforms/ios/LPMessagingSDK
-  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK');
+  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK/LPMessagingSDK.framework');
 
   const xcodeProjPath = fromDir('platforms/ios','.xcodeproj', false);
   const projectPath = xcodeProjPath + '/project.pbxproj';
