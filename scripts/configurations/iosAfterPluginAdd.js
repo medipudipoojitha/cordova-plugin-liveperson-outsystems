@@ -100,6 +100,7 @@ module.exports = function(context) {
   myProj.addToPbxFileReferenceSection(xcframeworkFile);
   myProj.addToFrameworksPbxGroup(xcframeworkFile);
   myProj.addToPbxFrameworksBuildPhase(xcframeworkFile);
+  myProj.addToFrameworkSearchPaths(xcframeworkFile);
 
   var embedFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
   embedFile.uuid = myProj.generateUuid();
