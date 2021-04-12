@@ -11,21 +11,6 @@ const ZIP_FILE = 'platforms/ios/LPMessagingSDK.zip';
 
 var COMMENT_KEY = /_comment$/;
 
-var copyRecursiveSync = function(src, dest) {
-  var exists = fs.existsSync(src);
-  var stats = exists && fs.lstatSync(src);
-  var isDirectory = exists && stats.isDirectory();
-  if (isDirectory) {
-    fs.mkdirSync(dest);
-    fs.readdirSync(src).forEach(function(childItemName) {
-      copyRecursiveSync(path.join(src, childItemName),
-                        path.join(dest, childItemName));
-    });
-  } else {
-    fs.copyFileSync(src, dest);
-  }
-};
-
 module.exports = function(context) {
   if(process.length >=5 && process.argv[1].indexOf('cordova') == -1) {
     if(process.argv[4] != 'ios') {
@@ -88,10 +73,6 @@ module.exports = function(context) {
   var zip = new AdmZip(ZIP_FILE);
   zip.extractAllTo("platforms/ios", true);
 
-  // copy platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework
-  // to platforms/ios/LPMessagingSDK
-  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK/LPMessagingSDK.framework');
-
   const xcodeProjPath = fromDir('platforms/ios','.xcodeproj', false);
   const projectPath = xcodeProjPath + '/project.pbxproj';
   const myProj = xcode.project(projectPath);
@@ -111,7 +92,7 @@ module.exports = function(context) {
 
   var pbxFileCtor = Object.getPrototypeOf(fakeFile).constructor;
 
-  var xcframeworkFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.framework']);
+  var xcframeworkFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
   xcframeworkFile.uuid = myProj.generateUuid();
   xcframeworkFile.fileRef = myProj.generateUuid();
   xcframeworkFile.target = myProj.getFirstTarget().uuid;
@@ -121,12 +102,38 @@ module.exports = function(context) {
   myProj.addToPbxFrameworksBuildPhase(xcframeworkFile);
   myProj.addToFrameworkSearchPaths(xcframeworkFile);
 
-  var embedFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.framework']);
+  var embedFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
   embedFile.uuid = myProj.generateUuid();
   embedFile.fileRef = xcframeworkFile.fileRef;
   embedFile.target = myProj.getFirstTarget().uuid;
   myProj.addToPbxBuildFileSection(embedFile);
   myProj.addToPbxEmbedFrameworksBuildPhase(embedFile);
+
+
+
+
+
+
+  var xcframeworkFile2 = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework']);
+  xcframeworkFile2.uuid = myProj.generateUuid();
+  xcframeworkFile2.fileRef = myProj.generateUuid();
+  xcframeworkFile2.target = myProj.getFirstTarget().uuid;
+  myProj.addToPbxBuildFileSection(xcframeworkFile2);
+  myProj.addToPbxFileReferenceSection(xcframeworkFile2);
+  myProj.addToFrameworksPbxGroup(xcframeworkFile2);
+  myProj.addToPbxFrameworksBuildPhase(xcframeworkFile2);
+  myProj.addToFrameworkSearchPaths(xcframeworkFile2);
+
+  var embedFile2 = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework']);
+  embedFile2.uuid = myProj.generateUuid();
+  embedFile2.fileRef = xcframeworkFile2.fileRef;
+  embedFile2.target = myProj.getFirstTarget().uuid;
+  myProj.addToPbxBuildFileSection(embedFile2);
+  myProj.addToPbxEmbedFrameworksBuildPhase(embedFile2);
+
+
+
+
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
   myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid)
