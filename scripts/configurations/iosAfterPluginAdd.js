@@ -112,9 +112,9 @@ module.exports = function(context) {
     var bundleFileResource = construct(pbxFileCtor, [path]);
     bundleFileResource.uuid = myProj.generateUuid();
     if (typeof(fileRef) === 'undefined') {
-      bundleFile.fileRef = myProj.generateUuid();
+      bundleFileResource.fileRef = myProj.generateUuid();
     } else {
-      bundleFile.fileRef = fileRef;
+      bundleFileResource.fileRef = fileRef;
     }
     bundleFileResource.target = myProj.getFirstTarget().uuid;
     myProj.addToPbxBuildFileSection(bundleFileResource);
