@@ -188,12 +188,7 @@ module.exports = function(context) {
       buildSettings['SWIFT_VERSION'] = "5.0";
     }
 
-    if (!buildSettings['LD_RUNPATH_SEARCH_PATHS']
-          || buildSettings['LD_RUNPATH_SEARCH_PATHS'] === '"$(inherited)"') {
-          buildSettings['LD_RUNPATH_SEARCH_PATHS'] = ['"$(inherited)"'];
-      }
-
-      buildSettings['LD_RUNPATH_SEARCH_PATHS'].push('@executable_path');
+    buildSettings['LD_RUNPATH_SEARCH_PATHS'] = ['"$(inherited)"', '@executable_path'];
   }
 
   fs.writeFileSync(projectPath, myProj.writeSync());
