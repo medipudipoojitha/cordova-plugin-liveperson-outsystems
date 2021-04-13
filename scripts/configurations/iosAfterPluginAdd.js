@@ -148,9 +148,6 @@ module.exports = function(context) {
   console.log('Adding LPMessagingSDK.xcframework to Resources');
   file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
   addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', file.fileRef);
-
-  file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework');
-  //addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', file.fileRef);
   
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
   for (var config in configurations) {
