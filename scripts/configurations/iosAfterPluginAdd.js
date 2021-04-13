@@ -92,6 +92,37 @@ module.exports = function(context) {
 
   var pbxFileCtor = Object.getPrototypeOf(fakeFile).constructor;
 
+  var addCopyFile = function(path, fileRef) {
+    var bundleFile = construct(pbxFileCtor, [path]);
+    bundleFile.uuid = myProj.generateUuid();
+    if (typeof(fileRef) === 'undefined') {
+      bundleFile.fileRef = myProj.generateUuid();
+    } else {
+      bundleFile.fileRef = fileRef;
+    }
+    bundleFile.target = myProj.getFirstTarget().uuid;
+    myProj.addToPbxBuildFileSection(bundleFile);
+    myProj.addToPbxFileReferenceSection(bundleFile);
+    myProj.addToPbxCopyfilesBuildPhase(bundleFile);
+
+    return bundleFile;
+  };
+
+  var addResourceFile = function(path, fileRef) {
+    var bundleFileResource = construct(pbxFileCtor, [path]);
+    bundleFileResource.uuid = myProj.generateUuid();
+    if (typeof(fileRef) === 'undefined') {
+      bundleFile.fileRef = myProj.generateUuid();
+    } else {
+      bundleFile.fileRef = fileRef;
+    }
+    bundleFileResource.target = myProj.getFirstTarget().uuid;
+    myProj.addToPbxBuildFileSection(bundleFileResource);
+    myProj.addToPbxResourcesBuildPhase(bundleFileResource);
+    
+    return bundleFileResource;
+  };
+
   var xcframeworkFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
   xcframeworkFile.uuid = myProj.generateUuid();
   xcframeworkFile.fileRef = myProj.generateUuid();
@@ -110,33 +141,17 @@ module.exports = function(context) {
   myProj.addToPbxEmbedFrameworksBuildPhase(embedFile);
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
-  myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid)
-  var bundleFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDKModels.bundle']);
-  bundleFile.uuid = myProj.generateUuid();
-  bundleFile.fileRef = myProj.generateUuid();
-  bundleFile.target = myProj.getFirstTarget().uuid;
-  myProj.addToPbxBuildFileSection(bundleFile);
-  myProj.addToPbxFileReferenceSection(bundleFile);
-  myProj.addToPbxCopyfilesBuildPhase(bundleFile);
-
-  var bundleFileResource = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDKModels.bundle']);
-  bundleFileResource.uuid = myProj.generateUuid();
-  bundleFileResource.fileRef = bundleFile.fileRef;
-  bundleFileResource.target = myProj.getFirstTarget().uuid;
-  myProj.addToPbxBuildFileSection(bundleFileResource);
-  myProj.addToPbxResourcesBuildPhase(bundleFileResource);
+  myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid);
+  var file = addCopyFile('LPMessagingSDK/LPMessagingSDKModels.bundle');
+  addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', file.fileRef);
 
   console.log('Adding LPMessagingSDK.xcframework to Resources');
-  myProj.addToPbxCopyfilesBuildPhase(xcframeworkFile);
+  file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
+  addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', file.fileRef);
 
-  var frameworkFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework']);
-  frameworkFile.uuid = myProj.generateUuid();
-  frameworkFile.fileRef = myProj.generateUuid();
-  frameworkFile.target = myProj.getFirstTarget().uuid;
-  myProj.addToPbxBuildFileSection(frameworkFile);
-  myProj.addToPbxFileReferenceSection(frameworkFile);
-  myProj.addToPbxCopyfilesBuildPhase(frameworkFile);
-
+  file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework');
+  addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', file.fileRef);
+  
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
   for (var config in configurations) {
     var buildSettings = configurations[config].buildSettings;
