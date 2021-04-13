@@ -157,12 +157,12 @@ module.exports = function(context) {
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
   myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid);
   var file = addCopyFile('LPMessagingSDK/LPMessagingSDKModels.bundle');
-  addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', null, file.fileRef);
+  addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', myProj.getFirstTarget().uuid, file.fileRef);
 
   console.log('Adding LPMessagingSDK.xcframework to Resources');
   var pluginsGroup = myProj.pbxGroupByName('Frameworks');
-  file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework', frameworksUuid);
-  addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', frameworksUuid, file.fileRef);
+  file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
+  addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', myProj.getFirstTarget().uuid, file.fileRef);
   
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
   for (var config in configurations) {
@@ -188,12 +188,12 @@ module.exports = function(context) {
       buildSettings['SWIFT_VERSION'] = "5.0";
     }
 
-    if (!buildSettings['FRAMEWORK_SEARCH_PATHS']
-          || buildSettings['FRAMEWORK_SEARCH_PATHS'] === '"$(inherited)"') {
-          buildSettings['FRAMEWORK_SEARCH_PATHS'] = ['"$(inherited)"'];
+    if (!buildSettings['LD_RUNPATH_SEARCH_PATHS']
+          || buildSettings['LD_RUNPATH_SEARCH_PATHS'] === '"$(inherited)"') {
+          buildSettings['LD_RUNPATH_SEARCH_PATHS'] = ['"$(inherited)"'];
       }
 
-      buildSettings['FRAMEWORK_SEARCH_PATHS'].push('LPMessagingSDK.framework');
+      buildSettings['LD_RUNPATH_SEARCH_PATHS'].push('@executable_path');
   }
 
   fs.writeFileSync(projectPath, myProj.writeSync());
