@@ -145,12 +145,7 @@ module.exports = function(context) {
   myProj.addToPbxFileReferenceSection(xcframeworkFile);
   myProj.addToFrameworksPbxGroup(xcframeworkFile);
   myProj.addToPbxFrameworksBuildPhase(xcframeworkFile);
-
-  var searchFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
-  searchFile.uuid = myProj.generateUuid();
-  searchFile.fileRef = xcframeworkFile.fileRef;
-  searchFile.target = myProj.getFirstTarget().uuid;
-  myProj.addToFrameworkSearchPaths(searchFile);
+  myProj.addToFrameworkSearchPaths(xcframeworkFile);
 
   var embedFile = construct(pbxFileCtor, ['LPMessagingSDK/LPMessagingSDK.xcframework']);
   embedFile.uuid = myProj.generateUuid();
@@ -192,6 +187,13 @@ module.exports = function(context) {
       console.log('Adding SWIFT_VERSION property');
       buildSettings['SWIFT_VERSION'] = "5.0";
     }
+
+    if (!buildSettings['FRAMEWORK_SEARCH_PATHS']
+          || buildSettings['FRAMEWORK_SEARCH_PATHS'] === '"$(inherited)"') {
+          buildSettings['FRAMEWORK_SEARCH_PATHS'] = ['"$(inherited)"'];
+      }
+
+      buildSettings['FRAMEWORK_SEARCH_PATHS'].push('LPMessagingSDK.framework');
   }
 
   fs.writeFileSync(projectPath, myProj.writeSync());
