@@ -179,8 +179,8 @@ module.exports = function(context) {
   addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', myProj.getFirstTarget().uuid, file.fileRef);
 
   fs.mkdirSync('platforms/ios/Frameworks');
-  //copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK.framework');
-  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework', 'platforms/ios/Frameworks/LPMessagingSDK.xcframework');
+  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/Frameworks/LPMessagingSDK.framework');
+  //copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework', 'platforms/ios/Frameworks/LPMessagingSDK.xcframework');
   file = addCopyFile('Frameworks');
   addResourceFile('Frameworks', myProj.getFirstTarget().uuid, file.fileRef);
   
