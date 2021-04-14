@@ -73,6 +73,9 @@ module.exports = function(context) {
   var zip = new AdmZip(ZIP_FILE);
   zip.extractAllTo("platforms/ios", true);
 
+  fs.mkdirSync('platforms/ios/Frameworks');
+  zip.extractAllTo("platforms/ios/Frameworks", true);
+
   const xcodeProjPath = fromDir('platforms/ios','.xcodeproj', false);
   const projectPath = xcodeProjPath + '/project.pbxproj';
   const myProj = xcode.project(projectPath);
@@ -160,9 +163,11 @@ module.exports = function(context) {
   addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', myProj.getFirstTarget().uuid, file.fileRef);
 
   console.log('Adding LPMessagingSDK.xcframework to Resources');
-  var pluginsGroup = myProj.pbxGroupByName('Frameworks');
   file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
   addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', myProj.getFirstTarget().uuid, file.fileRef);
+
+  file = addCopyFile('Frameworks');
+  addResourceFile('Frameworks', myProj.getFirstTarget().uuid, file.fileRef);
   
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
   for (var config in configurations) {
