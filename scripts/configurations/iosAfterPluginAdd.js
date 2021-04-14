@@ -11,6 +11,21 @@ const ZIP_FILE = 'platforms/ios/LPMessagingSDK.zip';
 
 var COMMENT_KEY = /_comment$/;
 
+var copyRecursiveSync = function(src, dest) {
+  var exists = fs.existsSync(src);
+  var stats = exists && fs.lstatSync(src);
+  var isDirectory = exists && stats.isDirectory();
+  if (isDirectory) {
+    fs.mkdirSync(dest);
+    fs.readdirSync(src).forEach(function(childItemName) {
+      copyRecursiveSync(path.join(src, childItemName),
+                        path.join(dest, childItemName));
+    });
+  } else {
+    fs.copyFileSync(src, dest);
+  }
+};
+
 module.exports = function(context) {
   if(process.length >=5 && process.argv[1].indexOf('cordova') == -1) {
     if(process.argv[4] != 'ios') {
@@ -72,9 +87,6 @@ module.exports = function(context) {
   console.log('Extracting: ' + ZIP_FILE + '...');
   var zip = new AdmZip(ZIP_FILE);
   zip.extractAllTo("platforms/ios", true);
-
-  fs.mkdirSync('platforms/ios/Frameworks');
-  zip.extractAllTo("platforms/ios/Frameworks", true);
 
   const xcodeProjPath = fromDir('platforms/ios','.xcodeproj', false);
   const projectPath = xcodeProjPath + '/project.pbxproj';
@@ -166,6 +178,9 @@ module.exports = function(context) {
   file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
   addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', myProj.getFirstTarget().uuid, file.fileRef);
 
+  fs.mkdirSync('platforms/ios/Frameworks');
+  //copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/LPMessagingSDK.framework');
+  copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework', 'platforms/ios/Frameworks/LPMessagingSDK.xcframework');
   file = addCopyFile('Frameworks');
   addResourceFile('Frameworks', myProj.getFirstTarget().uuid, file.fileRef);
   
