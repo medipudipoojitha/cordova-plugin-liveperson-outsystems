@@ -175,8 +175,8 @@ module.exports = function(context) {
   addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', myProj.getFirstTarget().uuid, file.fileRef);
 
   console.log('Adding LPMessagingSDK.xcframework to Resources');
-  file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
-  addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', myProj.getFirstTarget().uuid, file.fileRef);
+  //file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
+  //addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', myProj.getFirstTarget().uuid, file.fileRef);
 
   fs.mkdirSync('platforms/ios/Frameworks');
   copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/Frameworks/LPMessagingSDK.framework');
