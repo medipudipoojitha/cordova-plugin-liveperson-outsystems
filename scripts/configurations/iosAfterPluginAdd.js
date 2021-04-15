@@ -107,23 +107,15 @@ module.exports = function(context) {
 
   var pbxFileCtor = Object.getPrototypeOf(fakeFile).constructor;
 
-  var addCopyFile = function(path, target, fileRef) {
+  var addCopyFile = function(path, isBuildFile) {
     var bundleFile = construct(pbxFileCtor, [path]);
     bundleFile.uuid = myProj.generateUuid();
-
-    if (typeof(fileRef) === 'undefined') {
-      bundleFile.fileRef = myProj.generateUuid();
-    } else {
-      bundleFile.fileRef = fileRef;
-    }
-
-    if (typeof(target) === 'undefined' || target == null) {
-      bundleFile.target = myProj.getFirstTarget().uuid;
-    } else {
-      bundleFile.target = target;
-    }
+    bundleFile.fileRef = myProj.generateUuid();
+    bundleFile.target = myProj.getFirstTarget().uuid;
     
-    myProj.addToPbxBuildFileSection(bundleFile);
+    if (isBuildFile) {
+      myProj.addToPbxBuildFileSection(bundleFile);
+    }
     myProj.addToPbxFileReferenceSection(bundleFile);
     myProj.addToPbxCopyfilesBuildPhase(bundleFile);
 
@@ -171,17 +163,13 @@ module.exports = function(context) {
 
   console.log('Adding LPMessagingSDKModels.bundle to Resources');
   myProj.addBuildPhase([], 'PBXCopyFilesBuildPhase', 'Copy Files', myProj.getFirstTarget().uuid);
-  var file = addCopyFile('LPMessagingSDK/LPMessagingSDKModels.bundle');
+  var file = addCopyFile('LPMessagingSDK/LPMessagingSDKModels.bundle', true);
   addResourceFile('LPMessagingSDK/LPMessagingSDKModels.bundle', myProj.getFirstTarget().uuid, file.fileRef);
 
   console.log('Adding LPMessagingSDK.xcframework to Resources');
-  //file = addCopyFile('LPMessagingSDK/LPMessagingSDK.xcframework');
-  //addResourceFile('LPMessagingSDK/LPMessagingSDK.xcframework', myProj.getFirstTarget().uuid, file.fileRef);
-
   fs.mkdirSync('platforms/ios/Frameworks');
   copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework/ios-arm64/LPMessagingSDK.framework', 'platforms/ios/Frameworks/LPMessagingSDK.framework');
-  //copyRecursiveSync('platforms/ios/LPMessagingSDK/LPMessagingSDK.xcframework', 'platforms/ios/Frameworks/LPMessagingSDK.xcframework');
-  file = addCopyFile('Frameworks');
+  file = addCopyFile('Frameworks', false);
   addResourceFile('Frameworks', myProj.getFirstTarget().uuid, file.fileRef);
   
   var configurations = nonComments(myProj.pbxXCBuildConfigurationSection());
